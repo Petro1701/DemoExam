@@ -13,7 +13,7 @@ namespace DemoExam
 {
     public partial class MainForm : Form
     {
-        DataTable dataTable = new DataTable();
+        DataTable dataTable = new DataTable(); //Лучше создать внутри класса, чтобы обращаться ото всюду внутри класса, а не создавать заново
         public MainForm()
         {
             InitializeComponent();
@@ -47,22 +47,22 @@ namespace DemoExam
                 HeaderText = "Почта студента",
                 
             };
-            DataGridViewImageColumn photoColumn = new DataGridViewImageColumn()
+            DataGridViewImageColumn photoColumn = new DataGridViewImageColumn() //класс умеет работать с байтами изображения(BLOB) из БД
             {
                 Name = "Photo",
                 DataPropertyName = "photo_student",
                 Width = 100,
                 HeaderText = "Фото студента",
-                ImageLayout = DataGridViewImageCellLayout.Zoom
+                ImageLayout = DataGridViewImageCellLayout.Zoom //отрисовка изображения в ячейке
             };
             DataGridViewButtonColumn editButtonColumn = new DataGridViewButtonColumn()
             {
                 Name = "Edit",
                 Width = 40,
                 HeaderText = String.Empty,
-                Text = "✏",
+                Text = "✏", //нажмите Win+.(Или буква 'Ю' на клавиатуре)
                 UseColumnTextForButtonValue = true,
-                DefaultCellStyle = new DataGridViewCellStyle() { Padding = new Padding(5,30,5, 30)}
+                DefaultCellStyle = new DataGridViewCellStyle() { Padding = new Padding(5,30,5, 30)} //отступы формы кнопок от границ ячейки
             };
             DataGridViewButtonColumn deleteButtonColumn = new DataGridViewButtonColumn()
             {
@@ -92,9 +92,10 @@ namespace DemoExam
                         dataTable.Load(reader);
                     }
                 }
-                dataGridView1.DataSource = dataTable;
+                dataGridView1.DataSource = dataTable; //обязательно после dataTable.Load(reader); так как этот метод генерирует автоматически колонки.
+                                                      //Получается, что колонки SetupDataGridView() перекрываются автосгенерированными и вы увидите те колонки, которые хотели скрыть в SetupDataGridView()
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Logging(ex);
             }
