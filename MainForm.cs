@@ -74,7 +74,7 @@ namespace DemoExam
                 DefaultCellStyle = new DataGridViewCellStyle() { Padding = new Padding(5, 30, 5, 30) }
             };
             dataGridView1.Columns.AddRange(idColumn, photoColumn, nameColumn,emailColumn,editButtonColumn,deleteButtonColumn);
-            dataGridView1.DataSource = dataTable;
+            
         }
 
         private void LoadData()
@@ -92,6 +92,7 @@ namespace DemoExam
                         dataTable.Load(reader);
                     }
                 }
+                dataGridView1.DataSource = dataTable;
             }
             catch(Exception ex)
             {
