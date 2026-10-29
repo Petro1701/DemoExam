@@ -107,5 +107,12 @@ namespace DemoExam
         {
             Application.Exit();
         }
+
+        private void buttonAdd_Click(object sender, EventArgs e)
+        {
+            FormAddStudent formAddStudent = new FormAddStudent();
+            if (formAddStudent.ShowDialog() == DialogResult.OK) 
+                LoadData();
+        }
     }
 }

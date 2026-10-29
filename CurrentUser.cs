@@ -8,7 +8,7 @@ namespace DemoExam
 {
     public static class CurrentUser
     {
-        private static string nameUser;
+        private static string nameUser = "Danil Petrov";
         private static int idUser;
         public static string Name
         {
