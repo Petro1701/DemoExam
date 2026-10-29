@@ -114,5 +114,48 @@ namespace DemoExam
             if (formAddStudent.ShowDialog() == DialogResult.OK) 
                 LoadData();
         }
+        private void DeleteStudent(int idStudent, string nameStudent) //удаление студента по id, переданного из dgv
+        {
+            try
+            {
+                using (MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySqlConnection"].ConnectionString))
+                using (MySqlCommand command = new MySqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandText = "DELETE FROM students WHERE id_student = @idStudent";
+                    command.Parameters.AddWithValue("@idStudent", idStudent);
+                    connection.Open();
+                    if (command.ExecuteNonQuery() > 0)
+                        MessageBox.Show($"Студент {nameStudent} удалён!");
+                    else MessageBox.Show("Ошибка удаления. Повторите ещё раз!");
+                }
+            }
+            catch(Exception ex)
+            {
+                Log.Logging(ex);
+            }
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) //Реализовано удаление через кнопку в dgv
+        {
+            if(e.RowIndex >=0 & e.ColumnIndex == dataGridView1.Columns["Delete"].Index)
+            {
+                try
+                {
+                    int idStudent = (int)dataGridView1.Rows[e.RowIndex].Cells["ID"].Value;
+                    string nameStudent = dataGridView1.Rows[e.RowIndex].Cells["NameStudent"].Value.ToString();
+                    if(MessageBox.Show($"Удалить студента {nameStudent}?","Are you sure?",MessageBoxButtons.OKCancel) == DialogResult.OK)
+                    {
+                        DeleteStudent(idStudent, nameStudent);
+                        dataTable.Rows.RemoveAt(e.RowIndex);
+                    }
+                        
+                }
+                catch(Exception ex)
+                {
+                    Log.Logging(ex);
+                }
+            }
+        }
     }
 }
