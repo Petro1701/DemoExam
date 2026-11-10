@@ -34,7 +34,7 @@ namespace DemoExam
             };
             DataGridViewTextBoxColumn nameColumn = new DataGridViewTextBoxColumn()
             {
-                Name = "NameStudent",
+                Name = "Name",
                 DataPropertyName = "name_student",
                 Width = 100,
                 HeaderText = "Имя студента"
@@ -138,24 +138,41 @@ namespace DemoExam
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) //Реализовано удаление через кнопку в dgv
         {
-            if(e.RowIndex >=0 & e.ColumnIndex == dataGridView1.Columns["Delete"].Index)
+            if (e.RowIndex < 0) return;
+            try
             {
-                try
+                if (e.ColumnIndex == dataGridView1.Columns["Delete"].Index)
                 {
                     int idStudent = (int)dataGridView1.Rows[e.RowIndex].Cells["ID"].Value;
-                    string nameStudent = dataGridView1.Rows[e.RowIndex].Cells["NameStudent"].Value.ToString();
-                    if(MessageBox.Show($"Удалить студента {nameStudent}?","Are you sure?",MessageBoxButtons.OKCancel) == DialogResult.OK)
+                    string nameStudent = dataGridView1.Rows[e.RowIndex].Cells["Name"].Value.ToString();
+                    if (MessageBox.Show($"Удалить студента {nameStudent}?", "Are you sure?", MessageBoxButtons.OKCancel) == DialogResult.OK)
                     {
                         DeleteStudent(idStudent, nameStudent);
                         dataTable.Rows.RemoveAt(e.RowIndex);
                     }
-                        
                 }
-                catch(Exception ex)
+                if (e.ColumnIndex == dataGridView1.Columns["Edit"].Index)
                 {
-                    Log.Logging(ex);
+                    Student oldStudent = new Student()
+                    {
+                        Id = (int)dataGridView1.Rows[e.RowIndex].Cells["ID"].Value,
+                        Name = dataGridView1.Rows[e.RowIndex].Cells["Name"].Value.ToString(),
+                        Email = dataGridView1.Rows[e.RowIndex].Cells["Email"].Value.ToString(),
+                        PhotoBytes = dataGridView1.Rows[e.RowIndex].Cells["Photo"].Value as byte[]
+                    };
+                    using (EditStudentForm editStudentForm = new EditStudentForm(oldStudent))
+                    {
+                        if (editStudentForm.ShowDialog() == DialogResult.OK) LoadData();
+
+                    }
+
                 }
             }
+            catch(Exception ex)
+            {
+                Log.Logging(ex);
+            }
+           
         }
     }
 }
