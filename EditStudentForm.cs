@@ -74,11 +74,7 @@ namespace DemoExam
                     command.Parameters.AddWithValue("@photoBytes", EdittedStudent.PhotoBytes);
                     command.Parameters.AddWithValue("@id", EdittedStudent.Id);
                     connection.Open();
-                    if (command.ExecuteNonQuery() > 0)
-                    {
-                        MessageBox.Show("Изменения приняты!");
-                        DialogResult = DialogResult.OK;
-                    }
+                    if (command.ExecuteNonQuery() > 0) DialogResult = DialogResult.OK;
                 }
             }
             catch(Exception ex)
