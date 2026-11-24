@@ -114,7 +114,7 @@ namespace DemoExam
             if (formAddStudent.ShowDialog() == DialogResult.OK) 
                 LoadData();
         }
-        private void DeleteStudent(int idStudent, string nameStudent) //удаление студента по id, переданного из dgv
+        private void DeleteStudent(int idStudent, string nameStudent, int rowIndex) //удаление студента по id, переданного из dgv
         {
             try
             {
@@ -126,7 +126,10 @@ namespace DemoExam
                     command.Parameters.AddWithValue("@idStudent", idStudent);
                     connection.Open();
                     if (command.ExecuteNonQuery() > 0)
+                    {
                         MessageBox.Show($"Студент {nameStudent} удалён!");
+                        dataTable.Rows.RemoveAt(rowIndex);
+                    }
                     else MessageBox.Show("Ошибка удаления. Повторите ещё раз!");
                 }
             }
@@ -147,8 +150,8 @@ namespace DemoExam
                     string nameStudent = dataGridView1.Rows[e.RowIndex].Cells["Name"].Value.ToString();
                     if (MessageBox.Show($"Удалить студента {nameStudent}?", "Are you sure?", MessageBoxButtons.OKCancel) == DialogResult.OK)
                     {
-                        DeleteStudent(idStudent, nameStudent);
-                        dataTable.Rows.RemoveAt(e.RowIndex);
+                        DeleteStudent(idStudent, nameStudent, e.RowIndex);
+                        
                     }
                 }
                 if (e.ColumnIndex == dataGridView1.Columns["Edit"].Index)
