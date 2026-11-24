@@ -68,10 +68,7 @@ namespace DemoExam
                 if(ofd.ShowDialog() == DialogResult.OK)
                 {
                     photoBytes = File.ReadAllBytes(ofd.FileName);
-                    using (MemoryStream ms = new MemoryStream(photoBytes))
-                    {
-                        pictureBoxPhotoStudent.Image = Image.FromStream(ms);
-                    }
+                    pictureBoxPhotoStudent.Image = Image.FromFile(ofd.FileName);
                 }
             }
         }
